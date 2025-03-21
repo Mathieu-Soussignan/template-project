@@ -38,7 +38,7 @@ services:
       - mlflow
 
   mlflow:
-    image: mlfloworg/mlflow:latest  # Ou créez votre propre Dockerfile
+    image: mlfloworg/mlflow:latest
     container_name: mlflow
     ports:
       - "5000:5000"
@@ -68,7 +68,9 @@ services:
       - --web.enable-lifecycle
 
   grafana:
-    image: grafana/grafana:latest
+    build:
+      context: ./grafana
+      dockerfile: Dockerfile
     container_name: grafana
     ports:
       - "3000:3000"
@@ -78,6 +80,7 @@ services:
       - prometheus
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
 
 networks:
   myapp-network:

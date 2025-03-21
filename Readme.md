@@ -1,141 +1,153 @@
-# 📌 Guide d'utilisation du Template Global
+# Template Global pour Applications Data & Machine Learning
 
-Ce document décrit comment utiliser le template global pour créer et déployer rapidement un projet basé sur ce modèle. Il inclut la structure du projet, l'utilisation de Docker Compose, l'intégration de Prometheus et Grafana pour la supervision, ainsi que MLflow pour le suivi des expériences de Machine Learning.
+Ce template fournit une architecture complète pour développer, déployer et surveiller des applications de Machine Learning et Data Science avec Docker, MLflow, Prometheus et Grafana. Il inclut trois projets distincts (API de gestion des données, API de Machine Learning, et interface utilisateur Streamlit), ainsi que des outils de monitoring.
 
 ---
 
-## 🚀 1. Cloner le Template
+## 1. Structure du Projet
 
-Ce template est conçu pour être utilisé comme point de départ pour de nouveaux projets.
-
-### Option 1 : Utiliser "Use this template" sur GitHub
-1. Aller sur la page du dépôt GitHub du template.
-2. Cliquer sur **"Use this template"**.
-3. Donner un nom à votre nouveau projet et créer le repository.
-
-### Option 2 : Clonage classique
-Si vous souhaitez simplement récupérer le template et l'utiliser localement sans créer un nouveau repo GitHub immédiatement :
-
-```bash
-# Cloner le repo
-git clone https://github.com/votre-repo/template-global.git mon-nouveau-projet
-
-# Se déplacer dans le dossier
-cd mon-nouveau-projet
-
-# Supprimer l'historique Git pour repartir de zéro
-rm -rf .git
-
-# Initialiser un nouveau dépôt
-git init
-
-git add .
-git commit -m "Initialisation du projet depuis le template global"
+```
+📦 template-global
+├── 📂 Projet-1  (API de gestion des données)
+│   ├── 📂 models         # Modèles ML sauvegardés
+│   ├── 📂 modules        # Fonctions et classes réutilisables
+│   ├── 📂 routes         # Fichiers contenant les endpoints de l’API
+│   ├── 📂 tests          # Tests unitaires et d’intégration
+│   │   ├── test_main.py
+│   ├── 📂 data           # Données (ex: CSV, JSON)
+│   ├── 📂 fig            # Visualisations et graphiques
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── Readme.md
+├── 📂 Projet-2  (API Machine Learning)
+│   ├── 📂 models
+│   ├── 📂 modules
+│   ├── 📂 tests
+│   │   ├── test_main.py
+│   ├── 📂 data
+│   ├── 📂 fig
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── Readme.md
+├── 📂 Projet-3  (Interface Utilisateur Streamlit)
+│   ├── 📂 modules
+│   ├── 📂 tests
+│   │   ├── test_main.py
+│   ├── 📂 fig
+│   ├── Dockerfile
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── Readme.md
+├── 📂 monitoring  (Prometheus & Grafana)
+│   ├── 📂 grafana
+│   │   ├── 📂 provisioning
+│   │   │   ├── dashboards.yml
+│   │   │   ├── datasources.yml
+│   │   ├── Dockerfile
+│   ├── 📂 prometheus
+│   │   ├── prometheus.yml
+│   ├── docker-compose.monitoring.yml
+├── .github
+│   ├── 📂 workflows
+│   │   ├── ci.yml  # Pipeline CI/CD
+├── docker-compose.yml
+├── Readme.md
 ```
 
 ---
 
-## 🏗️ 2. Structure du Projet
+## 2. Installation et Exécution
 
-```
-mon-nouveau-projet/
-│── .github/workflows/    # CI/CD avec GitHub Actions
-│── grafana/              # Configuration Grafana
-│── prometheus/           # Configuration Prometheus
-│── Project-1/             # Service API 1
-│── Project-2/             # Service API 2
-│── Project-3/             # Interface Streamlit
-│── docker-compose.yml    # Déploiement multi-services
-│── Readme.md             # Documentation du projet
-│── requirements.txt      # Dépendances générales
-```
+### **Prérequis**
+- **Docker & Docker Compose**
+- **Python 3.9+** (si exécution locale)
+- **MLflow, Prometheus, Grafana** pour le suivi des modèles et monitoring
 
----
+### **Exécution avec Docker Compose**
 
-## 🏗️ 3. Déploiement avec Docker Compose
-
-### Prérequis
-- **Docker** & **Docker Compose** installés
-- Un fichier **.env** si nécessaire
-
-### Lancer les services
-
-```bash
+#### **Démarrer l’ensemble des services**
+```sh
 docker-compose up --build
 ```
-Cela démarre :
-✅ **Project-1** (API 1 sur le port 8001)
-✅ **Project-2** (API 2 sur le port 8002)
-✅ **Project-3** (Interface utilisateur Streamlit sur 8501)
-✅ **Prometheus** (Monitoring sur 9090)
-✅ **Grafana** (Visualisation sur 3000)
-✅ **MLflow** (Tracking des expériences sur 5001)
 
-### Arrêter les services
+#### **Démarrer uniquement le monitoring (Grafana & Prometheus)**
+```sh
+docker-compose -f docker-compose.monitoring.yml up --build
+```
 
-```bash
-docker-compose down
+#### **Accès aux services :**
+- API Projet 1 : http://localhost:8001
+- API Projet 2 : http://localhost:8002
+- Interface Streamlit : http://localhost:8501
+- MLflow Tracking UI : http://localhost:5001
+- Prometheus : http://localhost:9090
+- Grafana : http://localhost:3000
+
+---
+
+## 3. Développement & Tests
+
+### **Lancer un projet en local (sans Docker)**
+```sh
+cd Projet-1  # ou Projet-2, Projet-3
+python -m venv .venv
+source .venv/bin/activate  # Sur Windows : .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8001  # Adapter le port selon le projet
+```
+
+### **Exécuter les tests**
+```sh
+pytest tests/
+```
+
+### **Déploiement sur DockerHub**
+```sh
+docker build -t mon-image:latest .
+docker tag mon-image:latest mon-dockerhub/mon-template:latest
+docker push mon-dockerhub/mon-template:latest
 ```
 
 ---
 
-## 📊 4. Accès aux services
+## 4. Monitoring avec Prometheus & Grafana
 
-| Service       | URL |
-|--------------|----------------|
-| Project-3 (UI) | [http://localhost:8501](http://localhost:8501) |
-| Project-1 (API) | [http://localhost:8001](http://localhost:8001) |
-| Project-2 (API) | [http://localhost:8002](http://localhost:8002) |
-| Prometheus | [http://localhost:9090](http://localhost:9090) |
-| Grafana | [http://localhost:3000](http://localhost:3000) |
-| MLflow | [http://localhost:5001](http://localhost:5001) |
+### **Accès à Grafana**
+- Ouvrir Grafana : [http://localhost:3000](http://localhost:3000)
+- Identifiants par défaut : `admin / admin`
+- Ajouter une source de données Prometheus : `http://prometheus:9090`
+- Importer les dashboards via `provisioning/dashboards.yml`
 
----
-
-## 🔥 5. Supervision avec Prometheus & Grafana
-
-- **Prometheus** collecte les métriques des services.
-- **Grafana** permet de visualiser ces métriques.
-- Un dashboard Grafana par défaut est provisionné.
-
-### Accès à Grafana
-1. Ouvrir [http://localhost:3000](http://localhost:3000)
-2. Identifiants par défaut : `admin` / `admin`
-3. Ajouter **Prometheus** comme datasource : `http://prometheus:9090`
-4. Importer le dashboard fourni dans `grafana/provisioning`
-
----
-
-## 🎯 6. Suivi des Expériences avec MLflow
-
-- MLflow est utilisé pour suivre les entraînements de modèles.
-- Par défaut, il est accessible sur [http://localhost:5001](http://localhost:5001).
-- Un serveur de tracking est activé via Docker Compose.
-
-### Lancer une expérience MLflow
-Dans votre script d'entraînement, ajoutez :
-
-```python
-import mlflow
-mlflow.set_tracking_uri("http://mlflow:5001")
-mlflow.set_experiment("mon-experience")
+### **Suivi des performances des modèles avec MLflow**
+```sh
+docker-compose up mlflow
 ```
+Accès : [http://localhost:5001](http://localhost:5001)
 
 ---
 
-## 📌 7. Bonnes Pratiques
-✅ **Versionner le projet avec Git**
-✅ **Utiliser les volumes Docker pour la persistance des données**
-✅ **Personnaliser le `docker-compose.override.yml` si nécessaire**
-✅ **Configurer les alertes Grafana pour la surveillance des APIs**
+## 5. Fonctionnalités à venir
+✅ Intégration d’Airflow pour orchestrer les tâches ML
+✅ Intégration d’Alertmanager pour recevoir des notifications sur l’état des APIs
+✅ Intégration d’une base de données PostgreSQL pour le stockage des prédictions
 
 ---
 
-## 📬 8. Contributions & Améliorations
-Si vous souhaitez contribuer à l'amélioration de ce template, vous pouvez :
-- Proposer des améliorations via des **Pull Requests**.
-- Ouvrir des **Issues** pour signaler des problèmes ou des suggestions.
-- Discuter sur Slack/Discord si un espace communautaire existe.
+## 6. Utilisation du Template sur GitHub
+Si vous voulez réutiliser ce projet pour un nouveau développement :
+1. **Créer un nouveau repo GitHub**
+2. **Utiliser l’option** `Use this template` **sur GitHub**
+3. **Cloner le projet**
+```sh
+git clone https://github.com/votre-repo/template-global.git
+```
+4. **Adapter et personnaliser selon votre projet !**
 
 ---
-** Ce template est conçu pour accélérer la mise en place de nouveaux projets tout en garantissant une architecture scalable et supervisée. Bonne utilisation ! **
+
+### 📌 **Auteur & Contributeurs**
+Ce projet a été conçu et optimisé pour faciliter le développement et le suivi de projets ML. N’hésitez pas à contribuer et à proposer des améliorations !
