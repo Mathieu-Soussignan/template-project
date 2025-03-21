@@ -150,4 +150,5 @@ git clone https://github.com/votre-repo/template-global.git
 ---
 
 ### 📌 **Auteur & Contributeurs**
-Ce projet a été conçu et optimisé pour faciliter le développement et le suivi de projets ML. N’hésitez pas à contribuer et à proposer des améliorations !
+Ce projet a été conçu et optimisé pour faciliter le développement et le suivi de projets ML.
+- ** Mathieu Soussignan **. [Mon site web](https://www.mathieu-soussignan.com)
