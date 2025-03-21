@@ -1,0 +1,3 @@
+fastapi
+uvicorn
+# Optionnellement scikit-learn, pandas, etc. si vous voulez un vrai modèle

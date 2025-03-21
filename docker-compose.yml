@@ -1,0 +1,86 @@
+services:
+  project1:
+    build:
+      context: ./project-1
+      dockerfile: Dockerfile
+    container_name: project1
+    ports:
+      - "8001:8000"
+    networks:
+      - myapp-network
+    depends_on:
+      - mlflow
+
+  project2:
+    build:
+      context: ./project-2
+      dockerfile: Dockerfile
+    container_name: project2
+    ports:
+      - "8002:8000"
+    networks:
+      - myapp-network
+    depends_on:
+      - mlflow
+
+  project3:
+    build:
+      context: ./project-3
+      dockerfile: Dockerfile
+    container_name: project3
+    ports:
+      - "8501:8501"
+    networks:
+      - myapp-network
+    depends_on:
+      - project1
+      - project2
+      - mlflow
+
+  mlflow:
+    image: mlfloworg/mlflow:latest  # Ou créez votre propre Dockerfile
+    container_name: mlflow
+    ports:
+      - "5000:5000"
+    networks:
+      - myapp-network
+    volumes:
+      - ./mlruns:/mlflow
+    command: mlflow server \
+      --backend-store-uri sqlite:///mlflow.db \
+      --default-artifact-root /mlflow \
+      --host 0.0.0.0 --port 5000
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - myapp-network
+    depends_on:
+      - project1
+      - project2
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-lifecycle
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - myapp-network
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+networks:
+  myapp-network:
+
+volumes:
+  grafana-storage:
