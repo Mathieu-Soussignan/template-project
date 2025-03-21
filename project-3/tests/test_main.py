@@ -28,4 +28,4 @@ def test_predict_charges():
     }
     response = client.post("/predict-charge", json=payload)
     assert response.status_code == 200
-    assert "predicted_charges" in response.json()
+    assert "predicted_charges" in response.json() # noqa
