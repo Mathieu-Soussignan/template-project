@@ -38,7 +38,7 @@ services:
       - mlflow
 
   mlflow:
-    image: mlfloworg/mlflow:latest
+    image: ghcr.io/mlflow/mlflow:latest
     container_name: mlflow
     ports:
       - "5000:5000"
@@ -46,10 +46,12 @@ services:
       - myapp-network
     volumes:
       - ./mlruns:/mlflow
-    command: mlflow server \
-      --backend-store-uri sqlite:///mlflow.db \
-      --default-artifact-root /mlflow \
-      --host 0.0.0.0 --port 5000
+    command: >
+      mlflow server
+      --backend-store-uri sqlite:///mlflow.db
+      --default-artifact-root /mlflow
+      --host 0.0.0.0
+      --port 5000
 
   prometheus:
     image: prom/prometheus:latest
@@ -57,7 +59,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
       - myapp-network
     depends_on:
@@ -69,7 +71,7 @@ services:
 
   grafana:
     build:
-      context: ./grafana
+      context: ./monitoring/grafana
       dockerfile: Dockerfile
     container_name: grafana
     ports:
@@ -80,7 +82,7 @@ services:
       - prometheus
     volumes:
       - grafana-storage:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
 
 networks:
   myapp-network:
