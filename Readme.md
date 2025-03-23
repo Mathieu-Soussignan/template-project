@@ -83,7 +83,7 @@ docker-compose -f docker-compose.monitoring.yml up --build
 - API Projet 1 : http://localhost:8001
 - API Projet 2 : http://localhost:8002
 - Interface Streamlit : http://localhost:8501
-- MLflow Tracking UI : http://localhost:5001
+- MLflow Tracking UI : http://localhost:5000
 - Prometheus : http://localhost:9090
 - Grafana : http://localhost:3000
 

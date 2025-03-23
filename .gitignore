@@ -1,5 +1,26 @@
-.venv
-__pycache__
+# Environnement virtuel
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+__init__.py
+
+# Pytest
 .pytest_cache
-.vscode
+
+# Système
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Environnement
+.env
+
+# Données générées
 mlruns
