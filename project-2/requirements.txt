@@ -1,5 +1,9 @@
 fastapi
 uvicorn
-flake8
+scikit-learn
+pandas
+joblib
+mlflow
+httpx
 pytest
-# Optionnellement scikit-learn, pandas, etc. si vous voulez un vrai modèle
+flake8

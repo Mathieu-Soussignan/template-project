@@ -1,4 +1,6 @@
 streamlit
 requests
-flake8
+httpx
+pandas
 pytest
+flake8
