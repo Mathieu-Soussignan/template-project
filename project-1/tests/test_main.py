@@ -15,4 +15,4 @@ def test_root():
 def test_get_utilisateurs():
     response = client.get("/utilisateurs/")
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    assert isinstance(response.json(), list) # noqa
