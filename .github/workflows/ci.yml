@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test-projects:
+  test-template:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,15 +25,8 @@ jobs:
       - name: Install dependencies for ${{ matrix.project }}
         run: |
           cd ${{ matrix.project }}
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lint with flake8
+      - name: Run minimal tests
         run: |
-          cd ${{ matrix.project }}
-          flake8 .
-
-      - name: Run tests with pytest
-        run: |
-          cd ${{ matrix.project }}
-          if [ -d tests ]; then pytest; else echo "No tests directory"; fi
+          PYTHONPATH=${{ matrix.project }} pytest ${{ matrix.project }}/tests

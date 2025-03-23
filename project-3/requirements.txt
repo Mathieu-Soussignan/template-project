@@ -1,6 +1,4 @@
-streamlit
-requests
+fastapi
+uvicorn
 httpx
-pandas
 pytest
-flake8

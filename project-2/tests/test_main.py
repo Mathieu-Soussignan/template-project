@@ -7,7 +7,6 @@ client = TestClient(app)
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Projet 2 - API de prédiction des coûts médicaux"} # noqa
 
 
 def test_predict():

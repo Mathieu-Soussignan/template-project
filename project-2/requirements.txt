@@ -1,9 +1,5 @@
 fastapi
 uvicorn
-scikit-learn
-pandas
-joblib
-mlflow
 httpx
 pytest
-flake8
+pydantic
