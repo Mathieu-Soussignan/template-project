@@ -11,4 +11,4 @@ def root():
 @app.get("/predict")
 def predict():
     # Exemple d'une prédiction fictive
-    return {"prediction": 123.45}
+    return {"prediction": 123.45} # noqa
