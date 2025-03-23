@@ -10,6 +10,7 @@ __init__.py
 
 # Pytest
 .pytest_cache
+pytest.ini
 
 # Système
 .DS_Store
