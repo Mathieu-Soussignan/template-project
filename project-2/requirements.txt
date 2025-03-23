@@ -1,3 +1,5 @@
 fastapi
 uvicorn
+flake8
+pytest
 # Optionnellement scikit-learn, pandas, etc. si vous voulez un vrai modèle
